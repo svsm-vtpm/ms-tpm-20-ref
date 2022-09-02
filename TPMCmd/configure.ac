@@ -56,11 +56,31 @@ AS_IF([test "x$enable_usedeviceid" = "xyes"], [
     PKG_CHECK_MODULES([LIBUDEV], [libudev])
     [ADDITIONAL_LIBS="-ludev"]
 ])
-AX_PTHREAD([], [AC_MSG_ERROR([requires pthread])])
 
-AC_DEFINE([HASH_LIB], [Ossl], [Crypto lib for hash algorithms])
-AC_DEFINE([SYM_LIB], [Ossl], [Crypto lib for symmetric encryption algorithms])
-AC_DEFINE([MATH_LIB], [Ossl], [Crypto lib for bignum operations])
+AC_ARG_ENABLE([simulator],
+    AS_HELP_STRING([--enable-simulator], [Enable building the TPM simulator]))
+
+AS_IF([test "x$enable_simulator" = "xyes"], [
+    AX_PTHREAD([], [AC_MSG_ERROR([requires pthread])])
+])
+
+
+AC_ARG_WITH([crypto-engine],
+    [AS_HELP_STRING([--with-crypto-engine=libcrypto],[crypto provider openssl or wolfssl])],
+    [WITH_CRYPTO_ENGINE=$withval],
+    [WITH_CRYPTO_ENGINE="$DEFAULT_CRYPTO_ENGINE"])
+
+if test -n "$WITH_CRYPTO_ENGINE"; then
+  if test "$WITH_CRYPTO_ENGINE" == "Wolf"; then
+    AC_DEFINE([HASH_LIB], [Wolf], [Crypto lib for hash algorithms])
+    AC_DEFINE([SYM_LIB], [Wolf], [Crypto lib for symmetric encryption algorithms])
+    AC_DEFINE([MATH_LIB], [Wolf], [Crypto lib for bignum operations])
+  elif test "$WITH_CRYPTO_ENGINE" == "Ossl"; then
+    AC_DEFINE([HASH_LIB], [Ossl], [Crypto lib for hash algorithms])
+    AC_DEFINE([SYM_LIB], [Ossl], [Crypto lib for symmetric encryption algorithms])
+    AC_DEFINE([MATH_LIB], [Ossl], [Crypto lib for bignum operations])
+  fi
+fi
 
 ADD_COMPILER_FLAG([-std=gnu11])
 ADD_COMPILER_FLAG([-Werror])
