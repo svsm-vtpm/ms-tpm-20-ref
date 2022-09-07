@@ -42,6 +42,7 @@
 #include "Tpm.h"
 #include "Marshal.h"
 #include "ExecCommand_fp.h"
+#include "TpmDebug.h"
 
 // Uncomment this next #include if doing static command/response buffer sizing
 // #include "CommandResponseSizes_fp.h"
@@ -147,6 +148,7 @@ ExecuteCommand(
     result = TPMI_ST_COMMAND_TAG_Unmarshal(&command.tag,
                                            &command.parameterBuffer,
                                            &command.parameterSize);
+
     if(result != TPM_RC_SUCCESS)
         goto Cleanup;
     // Unmarshal the commandSize indicator.
@@ -172,6 +174,9 @@ ExecuteCommand(
                               &command.parameterSize);
     if(result != TPM_RC_SUCCESS)
         goto Cleanup;
+
+    TPM_CC_to_string(command.code);
+
     // Check to see if the command is implemented.
     command.index = CommandCodeToCommandIndex(command.code);
     if(UNIMPLEMENTED_COMMAND_INDEX == command.index)
