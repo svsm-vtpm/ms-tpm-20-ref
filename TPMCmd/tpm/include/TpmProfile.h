@@ -40,9 +40,6 @@
 #ifndef _TPM_PROFILE_H_
 #define _TPM_PROFILE_H_
 
-// Add wolfssl user_settings that
-#include "user_settings.h"
-
 // Table 2:4 - Defines for Logic Values
 #undef TRUE
 #define TRUE                1

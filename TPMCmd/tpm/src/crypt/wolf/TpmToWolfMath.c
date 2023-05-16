@@ -162,7 +162,7 @@ MathLibraryCompatibilityCheck(
     // Convert the test TPM2B to a bigNum
     BnFrom2B(tpmTemp, &test.b);
     MP_INITIALIZED(wolfTemp, tpmTemp);
-    (void)wolfTemp; // compiler warning
+    (wolfTemp); // compiler warning
     // Make sure the values are consistent
     VERIFY(wolfTemp->used * sizeof(fp_digit) == (int)tpmTemp->size * sizeof(crypt_uword_t));
     for(i = 0; i < tpmTemp->size; i++)

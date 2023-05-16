@@ -50,7 +50,6 @@
 
 #if ALG_SHA384 || ALG_SHA512
 #define WOLFSSL_SHA512
-#define WOLFSSL_SHA384
 #endif
 
 #if ALG_SM3_256
